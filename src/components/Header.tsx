@@ -1,6 +1,7 @@
 import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
+import useActiveSection from "@/hooks/useActiveSection"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import originLogo from "@/assets/origin logo.png"
 
@@ -26,59 +27,28 @@ const HamburgerIcon = ({ isOpen }: { isOpen: boolean }) => {
 };
 
 const Header = () => {
-  const [activeSection, setActiveSection] = useState("home");
-
-  const scrollToSection = (sectionId: string) => {
-    const section = document.querySelector(`section[data-section="${sectionId}"]`);
-    if (section) {
-      const offsetTop = section.getBoundingClientRect().top + window.pageYOffset;
-      window.scrollTo({
-        top: offsetTop - 80, // Adjust for header height
-        behavior: 'smooth'
-      });
-      setActiveSection(sectionId);
-    }
-  };
-
-  // Update active section based on scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['home', 'about', 'episodes', 'contact'];
-      const scrollPosition = window.scrollY + 100; // Offset for header
-
-      for (const sectionId of sections) {
-        const section = document.querySelector(`section[data-section="${sectionId}"]`);
-        if (section) {
-          const { top, bottom } = section.getBoundingClientRect();
-          if (top <= 100 && bottom > 100) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
-    };
-
-    handleScroll(); // Check initial position
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const { activeSection, scrollToSection } = useActiveSection();
 
   const buttonStyles = (section: string) => {
     return cn(
-      "relative overflow-hidden group px-4 py-1.5 rounded-full transition-all duration-300",
-      "text-sm font-medium tracking-wide",
-      "bg-transparent hover:bg-accent/10",
+      "relative overflow-hidden group px-5 py-2 rounded-full transition-all duration-300",
+      "text-sm font-semibold tracking-wide",
       "border border-transparent",
-      "hover:border-accent/30",
-      activeSection === section ? [
-        "text-accent",
-        "border-accent/50",
-        "bg-accent/10",
-        "shadow-[0_0_20px_rgba(0,200,255,0.2)]"
-      ] : [
-        "text-white/70",
-        "hover:text-accent"
-      ]
+      "backdrop-blur-sm",
+      activeSection === section
+        ? [
+            "text-white",
+            "bg-gradient-to-r from-accent to-primary",
+            "shadow-[0_6px_24px_rgba(58,123,213,0.18)]",
+            "scale-100",
+          ]
+        : [
+            "text-white/80",
+            "bg-transparent",
+            "hover:bg-accent/10",
+            "hover:text-white",
+            "hover:scale-105",
+          ],
     );
   };
 
@@ -123,30 +93,33 @@ const Header = () => {
                 "group-hover:scale-105"
               )}
               onClick={() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                setActiveSection('home');
+                scrollToSection('home');
               }}
             />
           </div>
         </div>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-2">
-          {['home', 'about', 'episodes', 'contact'].map((section) => (
+        <nav className="hidden md:flex items-center space-x-3">
+          {[
+            { id: 'home', label: 'Home' },
+            { id: 'episodes', label: 'Streaming' },
+            { id: 'about', label: 'About Us' },
+            { id: 'contact', label: 'Contact' },
+          ].map((item) => (
             <button
-              key={section}
+              key={item.id}
               onClick={() => {
-                if (section === 'home') {
+                if (item.id === 'home') {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
-                  scrollToSection(section);
+                  scrollToSection(item.id);
                 }
               }}
-              className={buttonStyles(section)}
+              aria-current={activeSection === item.id ? 'page' : undefined}
+              className={buttonStyles(item.id)}
             >
-              <span className="relative z-10 uppercase">
-                {section}
-              </span>
+              <span className="relative z-10">{item.label}</span>
             </button>
           ))}
         </nav>
@@ -172,26 +145,29 @@ const Header = () => {
               side="right" 
               className="w-full max-w-xs border-accent/20 bg-background/95 backdrop-blur-md p-6"
             >
-              <nav className="flex flex-col space-y-2 mt-8">
-                {['home', 'about', 'episodes', 'contact'].map((section) => (
+              <nav className="flex flex-col space-y-3 mt-8">
+                {[
+                  { id: 'home', label: 'Home' },
+                  { id: 'episodes', label: 'Streaming' },
+                  { id: 'about', label: 'About Us' },
+                  { id: 'contact', label: 'Contact' },
+                ].map((item) => (
                   <button
-                    key={section}
+                    key={item.id}
                     onClick={() => {
-                      if (section === 'home') {
+                      if (item.id === 'home') {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       } else {
-                        scrollToSection(section);
+                        scrollToSection(item.id);
                       }
                       setIsOpen(false);
                     }}
                     className={cn(
-                      buttonStyles(section),
-                      "w-full justify-center"
+                      buttonStyles(item.id),
+                      "w-full justify-center text-left px-6"
                     )}
                   >
-                    <span className="relative z-10 uppercase">
-                      {section}
-                    </span>
+                    <span className="relative z-10">{item.label}</span>
                   </button>
                 ))}
               </nav>

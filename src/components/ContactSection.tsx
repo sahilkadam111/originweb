@@ -1,121 +1,138 @@
 import { Button } from "@/components/ui/button";
-import { Mail, Instagram, Twitter, Linkedin, Mic, Radio, Headphones } from "lucide-react";
+import { Mail, Instagram, Twitter, Linkedin, Phone } from "lucide-react";
+import { useState } from "react";
 
 const socialLinks = [
-  {
-    name: "Email",
-    icon: Mail,
-    url: "mailto:sahil@theorigin.com",
-    color: "hover:text-blue-400",
-    description: "Studio inquiries",
-  },
-  {
-    name: "Instagram",
-    icon: Instagram,
-    url: "#",
-    color: "hover:text-pink-400",
-    description: "Behind the scenes",
-  },
-  {
-    name: "Twitter",
-    icon: Twitter,
-    url: "#",
-    color: "hover:text-blue-400",
-    description: "Episode updates",
-  },
-  {
-    name: "LinkedIn",
-    icon: Linkedin,
-    url: "#",
-    color: "hover:text-blue-600",
-    description: "Professional network",
-  },
+  { name: "Email", icon: Mail, url: "mailto:sahil@theorigin.com", color: "text-blue-500" , label: "Studio inquiries" },
+  { name: "Instagram", icon: Instagram, url: "#", color: "text-pink-500" , label: "Behind the scenes" },
+  { name: "Twitter", icon: Twitter, url: "#", color: "text-sky-500" , label: "Episode updates" },
+  { name: "LinkedIn", icon: Linkedin, url: "#", color: "text-blue-700" , label: "Professional network" },
+  { name: "WhatsApp", icon: Phone, url: "https://wa.me/1234567890", color: "text-[#25D366]", label: "Message on WhatsApp" },
 ];
 
 export default function ContactSection() {
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState<null | "idle" | "sending" | "sent" | "error">("idle");
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setForm((s) => ({ ...s, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.name || !form.email || !form.message) {
+      setStatus("error");
+      return;
+    }
+    setStatus("sending");
+    try {
+      // Simulate submission (replace with real endpoint later)
+      await new Promise((r) => setTimeout(r, 700));
+      setStatus("sent");
+      setForm({ name: "", email: "", message: "" });
+    } catch (err) {
+      setStatus("error");
+    }
+  }
+
   return (
-    <section data-section="contact" className="py-24 px-6 bg-card/20 relative">
-      {/* Studio Equipment Background */}
-      <div className="absolute top-0 left-0 right-0 bottom-0 overflow-hidden">
-        <div className="absolute top-10 left-10 opacity-5 rotate-12">
-          <Mic className="w-32 h-32 text-accent" />
-        </div>
-        <div className="absolute bottom-10 right-10 opacity-5 -rotate-12">
-          <Headphones className="w-28 h-28 text-primary" />
-        </div>
-        <div className="absolute top-1/2 left-1/4 opacity-5">
-          <Radio className="w-24 h-24 text-accent" />
-        </div>
-      </div>
-      
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <div className="mb-12">
-          <p className="text-accent text-lg font-medium mb-4 flex items-center justify-center gap-2">
-            <Mic className="w-5 h-5" />
-            Have a story worth telling? Let's begin.
-            <Mic className="w-5 h-5" />
+    <section data-section="contact" id="contact" aria-label="Contact" className="py-20 px-6 bg-gradient-to-b from-card/60 to-card/40">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mt-2">Contact & Collaborate</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mt-3">
+            Have an origin story, a collaboration idea, or studio inquiry? Use the form or reach out on socials — we respond to thoughtful messages.
           </p>
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <Radio className="w-8 h-8 text-accent mic-bounce" />
-            <h2 className="text-4xl md:text-5xl font-bold gradient-text">
-              Get in Touch
-            </h2>
-            <Headphones className="w-8 h-8 text-primary mic-bounce" style={{ animationDelay: '0.5s' }} />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          {/* Left: Contact info + socials */}
+          <div className="space-y-6">
+            <div className="glass-card p-6 rounded-2xl">
+              <h3 className="text-lg font-semibold">Studio & Booking</h3>
+              <p className="text-sm text-muted-foreground mt-2">For bookings, press, and creative collaborations — drop us a line.</p>
+
+              <div className="mt-4">
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-accent" />
+                  <a className="text-sm font-medium text-foreground" href="mailto:sahil@theorigin.com">sahil@theorigin.com</a>
+                </div>
+                <div className="mt-2 text-sm text-muted-foreground">Available for remote interviews and limited in-studio sessions.</div>
+              </div>
+            </div>
+
+            <div className="glass-card p-6 rounded-2xl">
+              <h4 className="text-sm font-semibold mb-3">Follow & Share</h4>
+              <div className="flex flex-wrap gap-3">
+                {socialLinks.map((s) => {
+                  const Icon = s.icon;
+                  return (
+                    <a key={s.name} href={s.url} aria-label={s.label} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-transparent hover:bg-muted/10 transition-colors">
+                      <Icon className={`${s.color} w-5 h-5`} />
+                      <span className="text-sm">{s.name}</span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="text-sm text-muted-foreground">
+              <strong className="text-foreground">Note:</strong> We read every message. If you don't hear back in a week, please send a gentle follow-up.
+            </div>
           </div>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Know an origin story that deserves to be told? Want to visit the studio? 
-            Have feedback or suggestions? I'd love to hear from you and explore new beginnings together.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
-          {socialLinks.map((social) => {
-            const IconComponent = social.icon;
-            return (
-              <a
-                key={social.name}
-                href={social.url}
-                className="glass-card p-6 rounded-2xl hover:scale-105 transition-all duration-300 group relative overflow-hidden"
-              >
-                {/* Studio Icon */}
-                <div className="absolute top-2 right-2 opacity-20">
-                  <Mic className="w-4 h-4 text-accent mic-bounce" />
+
+          {/* Right: Contact form */}
+          <div className="glass-card p-6 rounded-2xl">
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-foreground">Name</label>
+                <input
+                  id="name"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border border-input bg-card px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                  placeholder="Your name"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-foreground">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-md border border-input bg-card px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                  placeholder="you@domain.com"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-foreground">Message</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  rows={5}
+                  className="mt-1 block w-full rounded-md border border-input bg-card px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                  placeholder="Tell us about the story, idea, or collaboration..."
+                />
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Button type="submit" variant="hero" className="px-5 py-2">
+                  Send Message
+                </Button>
+                <div className="text-sm text-muted-foreground">
+                  {status === "sent" && <span className="text-green-400">Thanks — we'll reply soon.</span>}
+                  {status === "sending" && <span>Sending…</span>}
+                  {status === "error" && <span className="text-red-400">Please complete all fields.</span>}
                 </div>
-                
-                <IconComponent className={`h-8 w-8 mx-auto mb-3 text-muted-foreground group-hover:text-accent transition-colors ${social.color}`} />
-                <div className="text-sm font-medium text-foreground group-hover:text-accent transition-colors mb-1">
-                  {social.name}
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {social.description}
-                </div>
-              </a>
-            );
-          })}
-        </div>
-        
-        <div className="glass-card p-8 rounded-2xl relative">
-          {/* Studio Mic Decorations */}
-          <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
-            <Mic className="w-8 h-8 text-accent mic-bounce" />
-          </div>
-          
-          <h3 className="text-xl font-semibold mb-4 text-foreground flex items-center justify-center gap-3">
-            <Radio className="w-6 h-6 text-accent" />
-            Suggest a Story for the Studio
-            <Headphones className="w-6 h-6 text-primary" />
-          </h3>
-          <p className="text-muted-foreground mb-6">
-            Every great story starts somewhere. Share your ideas for future episodes, 
-            or nominate someone whose origin story deserves the spotlight.
-          </p>
-          <Button variant="neon" size="lg" className="pulse-neon">
-            <Mail className="mr-2 h-5 w-5" />
-            🎙️ Submit Your Story Idea
-          </Button>
-          
-          <div className="mt-6 text-sm text-muted-foreground italic">
-            "The best stories come from listeners who care about origins as much as we do."
+              </div>
+            </form>
           </div>
         </div>
       </div>
