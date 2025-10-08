@@ -1,10 +1,9 @@
 /* Fonts: Primary = Poppins, Secondary = Avallon Caps
-   - Poppins is loaded from Google Fonts.
-   - Avallon Caps is expected as a local font placed in `public/fonts/AvallonCaps-Regular.woff2`.
+   Poppins is loaded from Google Fonts.
+   Avallon Caps is expected as a local font placed in `public/fonts/AvallonCaps-Regular.woff2`.
      If you don't have the file, either add it to `public/fonts/` or update the `src` to a hosted URL.
 */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
 
 @font-face {
   font-family: 'Avallon Caps';
@@ -18,14 +17,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* The Origin Podcast Design System - Dark, Futuristic, Neon */
+/* Animation keyframes */
+@keyframes subtle-float {
+  0%, 100% { transform: translateY(0) scale(1.05); }
+  50% { transform: translateY(-10px) scale(1.05); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradient-text {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-subtle-float {
+  animation: subtle-float 15s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.8s ease-out forwards;
+}
+
+.animate-gradient-text {
+  background: linear-gradient(90deg, #f43f5e, #8b5cf6, #f43f5e);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-text 8s linear infinite;
+}
+
+.delay-0 { animation-delay: 0s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-400 { animation-delay: 0.4s; }
+
+/* Podcast Design System: Dark, Futuristic, Neon */
 
 @layer base {
   :root {
-    /* Brand fonts */
+    /* Brand fonts (all set to Poppins) */
     --font-primary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-secondary: 'Avallon Caps', 'Oswald', 'Anton', 'Impact', sans-serif;
-  --font-montserrat: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-secondary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-montserrat: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
     /* Dark Base Colors */
     --background: 240 15% 4%;
@@ -38,7 +84,7 @@
     --popover: 240 15% 6%;
     --popover-foreground: 180 100% 90%;
 
-  /* Brand Colors - Primary (light/dark) and Secondary palette */
+  /* Brand Colors: Primary (light/dark) and Secondary palette */
   /* PRIMARY: #fff8f8 (very light warm) and #000082 (deep blue) */
   --primary: 0 100% 98%; /* #fff8f8 */
   --primary-foreground: 240 15% 4%; /* keep dark foreground for contrast when used as background */
@@ -101,9 +147,9 @@
   }
 
   .dark {
-    /* Dark theme still uses brand fonts */
-    --font-primary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --font-secondary: 'Avallon Caps', 'Oswald', 'Anton', 'Impact', sans-serif;
+  /* Dark theme still uses brand fonts */
+  --font-primary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-secondary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
     /* Dark theme: use primary-dark and lighter secondary tints */
     --background: 240 5% 6%; /* near-black */
@@ -155,8 +201,15 @@
   body {
     font-family: var(--font-primary);
     @apply bg-background text-foreground;
-    /* Use Poppins Bold as primary weight across the site */
-    font-weight: 700;
+  /* Use Poppins across the site. Default (body) is regular for better readability */
+  font-weight: 400;
+  }
+
+  /* Ensure all h2 headings use the primary (Poppins) font */
+  h2 {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    line-height: 1.05;
   }
 
   /* Smooth scrolling */
@@ -169,20 +222,22 @@
   /* Utility classes for brand fonts */
   .font-primary {
     font-family: var(--font-primary) !important;
-    /* Enforce bold weight for primary font usage */
-    font-weight: 700 !important;
+  /* Enforce semi-bold weight for primary font usage */
+  font-weight: 600 !important;
   }
 
   .font-montserrat {
-    font-family: var(--font-montserrat) !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.06em;
+    /* Use Poppins instead of Montserrat to ensure site-wide consistency */
+    font-family: var(--font-primary) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em;
   }
 
   .font-secondary {
-    font-family: var(--font-secondary) !important;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    /* Use Poppins for all text (including previously 'secondary' special fonts) */
+    font-family: var(--font-primary) !important;
+    letter-spacing: 0.02em;
+    text-transform: none;
   }
 
   /* Neon glow effects */
@@ -216,73 +271,7 @@
     overflow: hidden;
   }
 
-  /* Featured Episodes Animations */
-  .glass-card {
-    position: relative;
-    transition: all 300ms ease-out;
-    transform: perspective(1000px) rotateX(0) rotateY(0);
-    background: linear-gradient(to right, var(--card), var(--card)) padding-box,
-                linear-gradient(45deg, var(--neon-cyan), var(--neon-purple)) border-box;
-    border: 2px solid transparent;
-    box-shadow: var(--shadow-card);
-  }
-
-  .glass-card:hover {
-    transform: perspective(1000px) rotateX(2deg) rotateY(2deg) scale(1.02) translateY(-4px);
-    box-shadow: var(--shadow-card), var(--shadow-neon);
-  }
-
-  .play-button-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(4px);
-    transition: all 300ms ease-out;
-  }
-
-  .glass-card:hover .play-button-overlay {
-    opacity: 1;
-  }
-
-  .play-button {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: black;
-    transform: scale(1);
-    transition: all 300ms ease-out;
-    animation: pulse 2s infinite;
-  }
-
-  /* Disable play-button animation in Featured Episodes section */
-  [data-section="episodes"] .play-button {
-    animation: none !important;
-  }
-
-  .play-button:hover {
-    transform: scale(1.1);
-    background: white;
-  }
-
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-    }
-    70% {
-      box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-    }
-  }
+  /* (Featured Episodes styles removed) */
 
   .reveal-fade {
     opacity: 0;

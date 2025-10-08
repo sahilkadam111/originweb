@@ -1,6 +1,5 @@
-import React from 'react';
-import { Mail, Mic } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+﻿import React from 'react';
+import { Mic } from 'lucide-react';
 
 export default function MakePodcast() {
   return (
@@ -8,13 +7,26 @@ export default function MakePodcast() {
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Let’s make a podcast</h2>
-            <p className="text-muted-foreground mb-6 text-lg">Have an idea, a story, or a brand that needs a voice? We help creators and companies develop, produce, and launch high-quality podcasts that connect with listeners.</p>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text tracking-normal leading-relaxed mb-6">
+              Let's make a podcast
+            </h2>
+            <p className="text-muted-foreground mb-6 text-lg">
+              Have an idea, a story, or a brand that needs a voice? We help creators and companies develop, produce, and launch high-quality podcasts that connect with listeners.
+            </p>
 
             <ul className="space-y-2 mb-6">
-              <li className="flex items-start gap-3"><Mic className="w-5 h-5 text-accent mt-1" /> Concept & format development</li>
-              <li className="flex items-start gap-3"><Mic className="w-5 h-5 text-accent mt-1" /> Full-service production & editing</li>
-              <li className="flex items-start gap-3"><Mic className="w-5 h-5 text-accent mt-1" /> Distribution & launch strategy</li>
+              <li className="flex items-start gap-3">
+                <Mic className="w-5 h-5 text-accent mt-1" /> 
+                Concept & format development
+              </li>
+              <li className="flex items-start gap-3">
+                <Mic className="w-5 h-5 text-accent mt-1" /> 
+                Full-service production & editing
+              </li>
+              <li className="flex items-start gap-3">
+                <Mic className="w-5 h-5 text-accent mt-1" /> 
+                Distribution & launch strategy
+              </li>
             </ul>
 
             <div className="flex gap-3">

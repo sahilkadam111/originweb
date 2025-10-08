@@ -5,10 +5,9 @@ import { useState, useEffect, createElement } from "react";
 import useActiveSection from "@/hooks/useActiveSection";
 import { useToast } from "@/hooks/use-toast";
 import originLogo from "@/assets/origin logo.png";
-import ep1Thumb from "@/assets/episode-1.jpg";
-import ep2Thumb from "@/assets/episode-2.jpg";
-import ep3Thumb from "@/assets/episode-3.jpg";
-import { Linkedin, Instagram, Youtube, Facebook, Music4, Mail, ArrowUp, Phone } from "lucide-react";
+import { socialLinks } from "@/config/social";
+// episode thumbnails removed, streaming section deleted per request
+import { Mail, ArrowUp } from "lucide-react";
 
 export default function Footer(): JSX.Element {
   const [email, setEmail] = useState("");
@@ -33,33 +32,19 @@ export default function Footer(): JSX.Element {
       toast({ title: "Invalid Email", description: "Please enter a valid email address.", variant: "destructive" });
       return;
     }
-    toast({ title: "Subscribed", description: "Thanks — you'll get updates from us." });
+  toast({ title: "Subscribed", description: "Thanks you'll get updates from us." });
     setEmail("");
   };
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-  const latestEpisodes = [
-    { id: 1, title: "The Big Bang Theory", description: "Exploring the birth of our universe", thumbnail: ep1Thumb },
-    { id: 2, title: "Dark Matter Mystery", description: "Understanding the invisible force", thumbnail: ep2Thumb },
-    { id: 3, title: "Black Holes", description: "Journey into the unknown", thumbnail: ep3Thumb },
-  ];
+  // latestEpisodes removed, streaming section deleted
 
-  const socialLinks = [
-    { name: "LinkedIn", href: "#", icon: Linkedin, color: "hover:text-[#0A66C2]", hoverBg: "hover:bg-[#0A66C2]/10", hoverBorder: "hover:border-[#0A66C2]/50" },
-    { name: "Instagram", href: "#", icon: Instagram, color: "hover:text-[#E4405F]", hoverBg: "hover:bg-[#E4405F]/10", hoverBorder: "hover:border-[#E4405F]/50" },
-    { name: "Youtube", href: "#", icon: Youtube, color: "hover:text-[#FF0000]", hoverBg: "hover:bg-[#FF0000]/10", hoverBorder: "hover:border-[#FF0000]/50" },
-    { name: "Facebook", href: "#", icon: Facebook, color: "hover:text-[#1877F2]", hoverBg: "hover:bg-[#1877F2]/10", hoverBorder: "hover:border-[#1877F2]/50" },
-    { name: "Spotify", href: "#", icon: Music4, color: "hover:text-[#1DB954]", hoverBg: "hover:bg-[#1DB954]/10", hoverBorder: "hover:border-[#1DB954]/50" },
-    { name: "WhatsApp", href: "https://wa.me/1234567890", icon: Phone, color: "hover:text-[#25D366]", hoverBg: "hover:bg-[#25D366]/10", hoverBorder: "hover:border-[#25D366]/50" },
-  ];
+
 
   const quickLinks = [
     { name: "About Us", href: "#about", id: "about" },
-    { name: "Episodes", href: "#episodes", id: "episodes" },
     { name: "Contact", href: "#contact", id: "contact" },
-    { name: "Privacy Policy", href: "#privacy" },
-    { name: "Terms of Use", href: "#terms" },
   ];
 
   const { activeSection, scrollToSection } = useActiveSection();
@@ -71,27 +56,41 @@ export default function Footer(): JSX.Element {
           <div className="space-y-4">
             <div className="space-y-4">
               <div className="flex items-center gap-4 group">
-                <div className="relative">
+                <div className="relative flex items-center">
                   <div className={cn("absolute -inset-2 rounded-xl transition-all duration-300", "opacity-0 group-hover:opacity-100", "bg-gradient-to-r from-accent/10 via-primary/10 to-accent/10", "group-hover:blur-md")} />
-                  <img src={originLogo} alt="Origin Story Logo" className={cn("h-14 sm:h-16 w-auto relative", "transition-all duration-300", "group-hover:brightness-125", "group-hover:scale-105")} />
+                  <img src={originLogo} alt="Origin Story Logo" className={cn("h-24 sm:h-28 w-auto relative", "transition-all duration-300", "group-hover:brightness-125", "group-hover:scale-105")} />
                 </div>
-                <div>
-                  <h3 className={cn("text-xl sm:text-2xl font-bold", "gradient-text", "relative inline-block", "py-2", "pb-3")}>The Origin</h3>
-                  <div className="mt-1 font-montserrat text-sm tracking-widest">
-                    <span className="text-[#fff8f8]">-BY</span>
-                    <span className="ml-2 text-[#d8b036]">TAC &amp; CO.</span>
+                <div className="flex flex-col justify-center">
+                  {/* Brand name removed per request */}
+                  <h3 className={cn("text-xl sm:text-2xl font-bold", "gradient-text", "relative inline-block", "py-2", "pb-3")}></h3>
+                  <div className="mt-1 font-primary text-sm tracking-wide">
+                    {/* Tagline removed per request */}
                   </div>
                 </div>
               </div>
-              <p className="text-muted-foreground">Every Story Has a Beginning.</p>
+              {/* tagline removed per request */}
+              {/* Social icons under brand */}
+              <div className="mt-4">
+                <div className="flex items-center gap-3">
+                  {socialLinks.filter((s) => s.url && s.url.length > 0).map((s) => {
+                    const Icon = s.icon;
+                    return (
+                      <a
+                        key={s.name}
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`p-2 rounded-md ${s.colorClass} hover:bg-accent/5 transition-colors duration-200`}
+                        aria-label={`Open ${s.name}`}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-3">
-              {socialLinks.map((social) => (
-                <a key={social.name} href={social.href} className={cn("w-10 h-10 flex items-center justify-center rounded-lg border border-border transition-all duration-300 text-muted-foreground group", social.color, social.hoverBg, social.hoverBorder, "hover:scale-110 hover:shadow-lg")} aria-label={social.name}>
-                  {createElement(social.icon, { size: 18, className: "transition-transform duration-300 group-hover:scale-110" })}
-                </a>
-              ))}
-            </div>
+
           </div>
 
           <div className="space-y-4">
@@ -117,24 +116,10 @@ export default function Footer(): JSX.Element {
                 </li>
               ))}
             </ul>
+            
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold tracking-wide">Streaming Episodes</h4>
-            <div className="space-y-4">
-              {latestEpisodes.map((episode) => (
-                <a key={episode.id} href="#" className={cn("flex items-center gap-3 group transition-all duration-300 hover:bg-accent/5 rounded-lg p-2 -mx-2")}>
-                  <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src={episode.thumbnail} alt={episode.title} className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h5 className="font-medium truncate group-hover:text-accent transition-colors duration-300">{episode.title}</h5>
-                    <p className="text-sm text-muted-foreground truncate">{episode.description}</p>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
+          {/* Streaming Episodes section removed per request */}
 
           <div className="space-y-4">
             <h4 className="text-lg font-semibold tracking-wide">Stay Updated</h4>
@@ -155,7 +140,7 @@ export default function Footer(): JSX.Element {
 
         <div className="pt-8 mt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-muted-foreground">© {new Date().getFullYear()} The Origin Podcast. All rights reserved.</div>
+            <div className="text-sm text-muted-foreground">© {new Date().getFullYear()} All rights reserved.</div>
             <div className="text-sm text-muted-foreground/60">Crafted with passion for storytelling and the pursuit of origins.</div>
           </div>
         </div>
