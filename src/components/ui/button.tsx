@@ -9,15 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-blue-600 hover:bg-blue-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-300 shadow-xl",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        outline: "border border-input bg-background hover:bg-blue-600 hover:text-white",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-gradient-to-r from-primary to-accent text-primary-foreground hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 neon-glow",
-        neon: "bg-transparent border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground transition-all duration-300 neon-glow",
-        glass: "bg-card/80 backdrop-blur-sm border border-border text-card-foreground hover:bg-card/90 transition-all duration-300",
+        ghost: "hover:bg-blue-600/10 hover:text-blue-600",
+        link: "text-blue-600 underline-offset-4 hover:underline",
+        hero: "bg-blue-600 hover:bg-blue-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-300 shadow-xl",
+        neon: "bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300",
+        glass: "bg-card/80 backdrop-blur-sm border border-border text-card-foreground hover:bg-blue-600/90 hover:text-white transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",
