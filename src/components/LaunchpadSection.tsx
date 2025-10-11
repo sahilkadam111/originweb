@@ -37,11 +37,11 @@ const cards = [
 
 export default function LaunchpadSection() {
   return (
-    <section className="py-20 px-6 bg-gradient-to-r from-background/30 to-card/30">
+    <section id="launchpad" data-section="launchpad" className="py-20 px-6 bg-gradient-to-r from-background/30 to-card/30">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-4xl md:text-5xl font-extrabold gradient-text leading-tight">The Launchpad to Choose Your Revolution</h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">Elevate your story, ignite your audience and own your moment five distinct frames to present your revolution.</p>
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">Elevate your story, ignite your audience and own your moment. Five distinct frames to present your revolution.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -65,12 +65,7 @@ export default function LaunchpadSection() {
                   </div>
                 </div>
 
-                <div className="mt-6 flex items-center justify-between z-10 relative">
-                  <div className="text-sm text-muted-foreground">Curate a session or feature, tailored storytelling formats available.</div>
-                  <Button variant="ghost" size="sm" className="opacity-80 group-hover:opacity-100" onClick={() => { window.location.hash = "#contact"; }}>
-                    Enquire
-                  </Button>
-                </div>
+                {/* small info line removed per user request */}
               </article>
             );
           })}
@@ -78,7 +73,7 @@ export default function LaunchpadSection() {
 
         <div className="mt-10 text-center">
           <Sparkles className="mx-auto mb-4 w-10 h-10 text-accent opacity-80" />
-          <p className="max-w-2xl mx-auto text-muted-foreground">Not sure which frame fits? Let’s craft a custom Launchpad, we help design the format, promotion and guest narrative so your debut resonates.</p>
+          <p className="max-w-2xl mx-auto text-muted-foreground">Not sure which frame fits? Let’s craft a custom Launchpad. We help design the format, promotion and guest narrative so your debut resonates.</p>
           <div className="mt-6">
             <Button variant="hero" onClick={() => { window.location.hash = "#contact"; }}>Build My Launchpad</Button>
           </div>

@@ -5,10 +5,7 @@ import ep3 from "../assets/episode-3.jpg";
 import ep4 from "../assets/episode-4.jpg";
 
 const slides = [
-  { src: ep1, title: "Episode 1 The Big Bang Theory", caption: "Exploring the birth of our universe" },
-  { src: ep2, title: "Episode 2 Dark Matter Mystery", caption: "Understanding the invisible force" },
-  { src: ep3, title: "Episode 3 Black Holes", caption: "Journey into the unknown" },
-  { src: ep4, title: "Episode 4 Voices That Connect", caption: "Conversations that stick" },
+  { src: ep4, title: "Episode 4: Voices That Connect", caption: "Conversations that stick" },
 ];
 
 export default function SlideshowHero({ interval = 4000 }: { interval?: number }) {

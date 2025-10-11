@@ -19,7 +19,7 @@ export default function useActiveSection() {
 
   useEffect(() => {
     const onScroll = () => {
-      const sections = ["home", "about", "episodes", "contact"];
+      const sections = ["home", "about", "host", "launchpad", "contact"];
       for (const id of sections) {
         const el = document.querySelector(`section[data-section="${id}"]`);
         if (el) {

@@ -39,7 +39,7 @@ export default function StreamingHero() {
                     <img src={s.image} alt={s.title} className="absolute inset-0 w-full h-full object-cover" />
                   </div>
                   <div className="absolute inset-0 flex items-end p-4">
-                    <div className="bg-gradient-to-t from-black/60 to-transparent w-full p-4 rounded-tl-2xl">
+                    <div className="bg-black/60 w-full p-4 rounded-tl-2xl">
                       <div className="flex items-center justify-between">
                         <h3 className="text-white font-semibold line-clamp-2">{s.title}</h3>
                         <button className="bg-accent text-accent-foreground p-2 rounded-full">

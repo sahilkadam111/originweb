@@ -6,8 +6,11 @@ import useActiveSection from "@/hooks/useActiveSection";
 import { useToast } from "@/hooks/use-toast";
 import originLogo from "@/assets/origin logo.png";
 import { socialLinks } from "@/config/social";
-// episode thumbnails removed, streaming section deleted per request
+import ep1Thumb from "@/assets/episode-1.jpg";
+import ep2Thumb from "@/assets/episode-2.jpg";
+import ep3Thumb from "@/assets/episode-3.jpg";
 import { Mail, ArrowUp } from "lucide-react";
+import { NEWSLETTER_ENDPOINT } from "@/config/newsletterConfig";
 
 export default function Footer(): JSX.Element {
   const [email, setEmail] = useState("");
@@ -22,7 +25,7 @@ export default function Footer(): JSX.Element {
 
   const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
       toast({ title: "Email Required", description: "Please enter your email address.", variant: "destructive" });
@@ -32,18 +35,56 @@ export default function Footer(): JSX.Element {
       toast({ title: "Invalid Email", description: "Please enter a valid email address.", variant: "destructive" });
       return;
     }
-  toast({ title: "Subscribed", description: "Thanks you'll get updates from us." });
-    setEmail("");
+
+    try {
+      const formData = {
+        timestamp: new Date().toISOString(),
+        email: email,
+        source: "website_footer"
+      };
+
+      if (NEWSLETTER_ENDPOINT && NEWSLETTER_ENDPOINT !== "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE") {
+        await fetch(NEWSLETTER_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          mode: "no-cors",
+          body: JSON.stringify(formData)
+        });
+
+        toast({ 
+          title: "Successfully Subscribed!", 
+          description: "Thanks for subscribing. You'll receive our latest updates via email." 
+        });
+      } else {
+        // Fallback if endpoint is not configured
+        console.log("Newsletter subscription:", formData);
+        toast({ 
+          title: "Subscribed", 
+          description: "Thanks, you'll get updates from us." 
+        });
+      }
+      setEmail("");
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      toast({ 
+        title: "Subscription Failed", 
+        description: "Sorry, we couldn't process your subscription. Please try again later.", 
+        variant: "destructive" 
+      });
+    }
   };
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-  // latestEpisodes removed, streaming section deleted
+  const latestEpisodes: { id: number; title: string; description: string; thumbnail: string }[] = [];
 
 
 
   const quickLinks = [
+    { name: "Home", href: "#home", id: "home" },
     { name: "About Us", href: "#about", id: "about" },
+    { name: "Host", href: "#host", id: "host" },
+    { name: "Launchpad", href: "#launchpad", id: "launchpad" },
     { name: "Contact", href: "#contact", id: "contact" },
   ];
 
@@ -56,16 +97,13 @@ export default function Footer(): JSX.Element {
           <div className="space-y-4">
             <div className="space-y-4">
               <div className="flex items-center gap-4 group">
-                <div className="relative flex items-center">
+                <div className="relative">
                   <div className={cn("absolute -inset-2 rounded-xl transition-all duration-300", "opacity-0 group-hover:opacity-100", "bg-gradient-to-r from-accent/10 via-primary/10 to-accent/10", "group-hover:blur-md")} />
-                  <img src={originLogo} alt="Origin Story Logo" className={cn("h-24 sm:h-28 w-auto relative", "transition-all duration-300", "group-hover:brightness-125", "group-hover:scale-105")} />
+                  <img src={originLogo} alt="Origin Story Logo" className={cn("h-24 md:h-32 w-auto relative", "transition-all duration-300", "group-hover:brightness-125", "group-hover:scale-105")} />
                 </div>
-                <div className="flex flex-col justify-center">
-                  {/* Brand name removed per request */}
-                  <h3 className={cn("text-xl sm:text-2xl font-bold", "gradient-text", "relative inline-block", "py-2", "pb-3")}></h3>
-                  <div className="mt-1 font-primary text-sm tracking-wide">
-                    {/* Tagline removed per request */}
-                  </div>
+                <div>
+                  <h3 className={cn("text-xl sm:text-2xl font-bold", "gradient-text", "relative inline-block", "py-2", "pb-3")}>The Origin</h3>
+                  {/* brand suffix removed per request */}
                 </div>
               </div>
               {/* tagline removed per request */}
@@ -80,10 +118,10 @@ export default function Footer(): JSX.Element {
                         href={s.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`p-2 rounded-md ${s.colorClass} hover:bg-accent/5 transition-colors duration-200`}
+                        className={`inline-flex items-center justify-center w-12 h-12 rounded-md ${s.colorClass} hover:bg-accent/5 transition-colors duration-200`}
                         aria-label={`Open ${s.name}`}
                       >
-                        <Icon className="w-5 h-5" />
+                        <Icon className="w-6 h-6" />
                       </a>
                     );
                   })}
@@ -102,14 +140,14 @@ export default function Footer(): JSX.Element {
                     <button
                       onClick={() => scrollToSection(link.id!)}
                       className={cn(
-                        "transition-colors duration-300 block py-1 text-left w-full text-muted-foreground",
+                        "transition-colors duration-300 block py-2 text-left w-full text-muted-foreground text-base",
                         activeSection === link.id && "text-accent font-semibold"
                       )}
                     >
                       {link.name}
                     </button>
                   ) : (
-                    <a href={link.href} className={cn("text-muted-foreground hover:text-accent transition-colors duration-300 block py-1")}>
+                    <a href={link.href} className={cn("text-muted-foreground hover:text-accent transition-colors duration-300 block py-2 text-base")}>
                       {link.name}
                     </a>
                   )}
@@ -119,7 +157,22 @@ export default function Footer(): JSX.Element {
             
           </div>
 
-          {/* Streaming Episodes section removed per request */}
+          <div className="space-y-4">
+            {/* Streaming Episodes header removed per user request */}
+            <div className="space-y-4">
+              {latestEpisodes.map((episode) => (
+                <a key={episode.id} href="#" className={cn("flex items-center gap-3 group transition-all duration-300 hover:bg-accent/5 rounded-lg p-2 -mx-2")}>
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                    <img src={episode.thumbnail} alt={episode.title} className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h5 className="font-medium truncate group-hover:text-accent transition-colors duration-300">{episode.title}</h5>
+                    <p className="text-sm text-muted-foreground truncate">{episode.description}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
 
           <div className="space-y-4">
             <h4 className="text-lg font-semibold tracking-wide">Stay Updated</h4>
@@ -140,7 +193,7 @@ export default function Footer(): JSX.Element {
 
         <div className="pt-8 mt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-sm text-muted-foreground">© {new Date().getFullYear()} All rights reserved.</div>
+            <div className="text-sm text-muted-foreground">© {new Date().getFullYear()} The Origin Podcast. All rights reserved.</div>
             <div className="text-sm text-muted-foreground/60">Crafted with passion for storytelling and the pursuit of origins.</div>
           </div>
         </div>

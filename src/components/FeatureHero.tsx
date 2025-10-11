@@ -11,7 +11,7 @@ export default function FeatureHero() {
           alt="Professional podcast studio setup"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/60" />
+        <div className="absolute inset-0 bg-background/80" />
       </div>
 
       {/* Content */}

@@ -1,9 +1,10 @@
 /* Fonts: Primary = Poppins, Secondary = Avallon Caps
-   Poppins is loaded from Google Fonts.
-   Avallon Caps is expected as a local font placed in `public/fonts/AvallonCaps-Regular.woff2`.
+   - Poppins is loaded from Google Fonts.
+   - Avallon Caps is expected as a local font placed in `public/fonts/AvallonCaps-Regular.woff2`.
      If you don't have the file, either add it to `public/fonts/` or update the `src` to a hosted URL.
 */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 
 @font-face {
   font-family: 'Avallon Caps';
@@ -64,14 +65,14 @@
 .delay-200 { animation-delay: 0.2s; }
 .delay-400 { animation-delay: 0.4s; }
 
-/* Podcast Design System: Dark, Futuristic, Neon */
+/* The Origin Podcast Design System - Dark, Futuristic, Neon */
 
 @layer base {
   :root {
-    /* Brand fonts (all set to Poppins) */
+    /* Brand fonts */
     --font-primary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-secondary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-montserrat: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-secondary: 'Avallon Caps', 'Oswald', 'Anton', 'Impact', sans-serif;
+  --font-montserrat: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
     /* Dark Base Colors */
     --background: 240 15% 4%;
@@ -84,7 +85,7 @@
     --popover: 240 15% 6%;
     --popover-foreground: 180 100% 90%;
 
-  /* Brand Colors: Primary (light/dark) and Secondary palette */
+  /* Brand Colors - Primary (light/dark) and Secondary palette */
   /* PRIMARY: #fff8f8 (very light warm) and #000082 (deep blue) */
   --primary: 0 100% 98%; /* #fff8f8 */
   --primary-foreground: 240 15% 4%; /* keep dark foreground for contrast when used as background */
@@ -147,9 +148,9 @@
   }
 
   .dark {
-  /* Dark theme still uses brand fonts */
-  --font-primary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-secondary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    /* Dark theme still uses brand fonts */
+    --font-primary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-secondary: 'Avallon Caps', 'Oswald', 'Anton', 'Impact', sans-serif;
 
     /* Dark theme: use primary-dark and lighter secondary tints */
     --background: 240 5% 6%; /* near-black */
@@ -201,15 +202,8 @@
   body {
     font-family: var(--font-primary);
     @apply bg-background text-foreground;
-  /* Use Poppins across the site. Default (body) is regular for better readability */
-  font-weight: 400;
-  }
-
-  /* Ensure all h2 headings use the primary (Poppins) font */
-  h2 {
-    font-family: var(--font-primary);
-    font-weight: 600;
-    line-height: 1.05;
+    /* Prefer normal weight across the site */
+    font-weight: 400;
   }
 
   /* Smooth scrolling */
@@ -222,22 +216,30 @@
   /* Utility classes for brand fonts */
   .font-primary {
     font-family: var(--font-primary) !important;
-  /* Enforce semi-bold weight for primary font usage */
-  font-weight: 600 !important;
+    /* Prefer normal weight for primary font; utilities can be overridden */
+    font-weight: 400 !important;
+  }
+
+  /* Global override: neutralize bold weights so text renders non-bold by default
+     `!important` used to override Tailwind utilities like `font-bold` */
+  html, body, * {
+    font-weight: 400 !important;
+  }
+
+  b, strong {
+    font-weight: 400 !important;
   }
 
   .font-montserrat {
-    /* Use Poppins instead of Montserrat to ensure site-wide consistency */
-    font-family: var(--font-primary) !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.02em;
+    font-family: var(--font-montserrat) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em;
   }
 
   .font-secondary {
-    /* Use Poppins for all text (including previously 'secondary' special fonts) */
-    font-family: var(--font-primary) !important;
-    letter-spacing: 0.02em;
-    text-transform: none;
+    font-family: var(--font-secondary) !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   /* Neon glow effects */
@@ -264,6 +266,13 @@
     margin: 0 auto;
   }
 
+  /* Center all h2 headings on desktop (md and larger) */
+  @media (min-width: 768px) {
+    h2 {
+      text-align: center;
+    }
+  }
+
   /* Hero background */
   .hero-bg {
     background: var(--gradient-hero);
@@ -271,7 +280,73 @@
     overflow: hidden;
   }
 
-  /* (Featured Episodes styles removed) */
+  /* Featured Episodes Animations */
+  .glass-card {
+    position: relative;
+    transition: all 300ms ease-out;
+    transform: perspective(1000px) rotateX(0) rotateY(0);
+    background: linear-gradient(to right, var(--card), var(--card)) padding-box,
+                linear-gradient(45deg, var(--neon-cyan), var(--neon-purple)) border-box;
+    border: 2px solid transparent;
+    box-shadow: var(--shadow-card);
+  }
+
+  .glass-card:hover {
+    transform: perspective(1000px) rotateX(2deg) rotateY(2deg) scale(1.02) translateY(-4px);
+    box-shadow: var(--shadow-card), var(--shadow-neon);
+  }
+
+  .play-button-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    transition: all 300ms ease-out;
+  }
+
+  .glass-card:hover .play-button-overlay {
+    opacity: 1;
+  }
+
+  .play-button {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    transform: scale(1);
+    transition: all 300ms ease-out;
+    animation: pulse 2s infinite;
+  }
+
+  /* Disable play-button animation in Featured Episodes section */
+  [data-section="episodes"] .play-button {
+    animation: none !important;
+  }
+
+  .play-button:hover {
+    transform: scale(1.1);
+    background: white;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+  }
 
   .reveal-fade {
     opacity: 0;
@@ -331,6 +406,68 @@
   @keyframes float {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
     50% { transform: translateY(-20px) rotate(180deg); }
+  }
+
+  /* Left-side horizontal-label nav (Infosys-like) */
+  .side-nav {
+    /* fixed left-side, slightly inset */
+    width: auto;
+    padding-left: 0.25rem;
+    z-index: 60;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+  }
+
+  .side-nav ul { list-style: none; margin: 0; padding: 0; }
+
+  .side-nav button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    background: transparent;
+    border: none;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    transition: color 180ms ease, box-shadow 180ms ease, background-color 180ms ease, transform 180ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .side-nav button:hover {
+    color: hsl(var(--accent-foreground));
+    transform: translateX(-2px);
+    text-decoration: none;
+  }
+
+  .side-nav .text-accent {
+    color: hsl(var(--accent-foreground));
+  }
+
+  /* Keep nav hidden on small screens */
+  @media (max-width: 1023px) {
+    .side-nav { display: none; }
+  }
+
+  /* Vertical label sizing and accessibility */
+  .side-nav ul { padding: 0; margin: 0; }
+  .side-nav li { list-style: none; }
+  .side-nav button span { display: inline-block; font-size: 0.85rem; line-height: 1; }
+
+  /* Active state: subtle background and neon accent stroke */
+  .side-nav button[aria-current="page"] {
+    color: hsl(var(--accent-foreground));
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 6px 18px rgba(99,102,241,0.06), 0 0 8px rgba(99,102,241,0.04) inset;
+    border-radius: 0.4rem;
+    transform: translateX(-3px) scale(1.01);
+  }
+
+  /* Focus ring for keyboard users */
+  .side-nav button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.12), 0 0 10px rgba(99,102,241,0.06);
+    border-radius: 0.4rem;
   }
 
   /* Pulse animation for buttons */

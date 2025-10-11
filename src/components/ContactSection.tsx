@@ -29,22 +29,34 @@ export default function ContactSection() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // run validation
+    // Clear previous status
+    setStatus("idle");
+    
+    // Run validation
     if (!validateForm()) {
       setStatus("error");
       return;
     }
+    
     setStatus("sending");
     try {
-      const endpoint = contactConfig.CONTACT_ENDPOINT;
-      if (endpoint) {
-        const res = await fetch(endpoint, {
+      // Include timestamp in the form data
+      const formData = {
+        timestamp: new Date().toISOString(),
+        ...form
+      };
+      
+      const GOOGLE_SCRIPT_URL = contactConfig.CONTACT_ENDPOINT;
+      if (GOOGLE_SCRIPT_URL) {
+        const res = await fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
+          mode: "no-cors", // Important for cross-origin requests to Google Scripts
+          body: JSON.stringify(formData),
         });
 
-        if (!res.ok) throw new Error("Network response was not ok");
+        // Since we're using no-cors, we won't get an error response
+        // Instead, we'll assume success if the request completes
         setStatus("sent");
         setForm({ name: "", contactNo: "", email: "", message: "" });
         } else {
@@ -99,7 +111,7 @@ export default function ContactSection() {
         <div className="mb-12 text-center">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text tracking-normal leading-relaxed mb-6">Contact & Collaborate</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mt-3">
-            Have an origin story, a collaboration idea, or studio inquiry? Use the form to reach out; we respond to thoughtful messages.
+            Have an origin story, a collaboration idea, or studio inquiry? Use the form to reach out. We respond to thoughtful messages.
           </p>
         </div>
 
@@ -108,21 +120,21 @@ export default function ContactSection() {
           <div className="space-y-6">
             <div className="glass-card p-6 rounded-2xl">
               <h3 className="text-lg font-semibold">Studio & Booking</h3>
-              <p className="text-sm text-muted-foreground mt-2">For bookings, press, and creative collaborations, drop us a line.</p>
+              <p className="text-sm text-muted-foreground mt-2">For bookings, press, and creative collaborations drop us a line.</p>
 
               <div className="mt-4">
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-accent" />
                   <a className="text-sm font-medium text-foreground" href="mailto:contact@originpodcast.in">contact@originpodcast.in</a>
                 </div>
-                <div className="mt-2 text-sm text-muted-foreground">Available for remote interviews and limited in-studio sessions.</div>
+                <div className="mt-2 text-sm text-muted-foreground">Available for remote interviews and limited in studio sessions.</div>
               </div>
             </div>
 
 
 
             <div className="text-sm text-muted-foreground">
-              <strong className="text-foreground">Note:</strong> We read every message. If you don't hear back in a week, please send a gentle follow-up.
+              <strong className="text-foreground">Note:</strong> We read every message. If you don't hear back in a week, please send a gentle follow up.
             </div>
           </div>
 
@@ -176,7 +188,7 @@ export default function ContactSection() {
                 {errors.email && <div className="mt-1 text-xs text-red-400">{errors.email}</div>}
               </div>
 
-              {/* Message is optional; reveal on demand */}
+              {/* Message is optional, reveal on demand */}
               <div>
                 <div className="flex items-center justify-between">
                   <label htmlFor="message" className="block text-sm font-medium text-foreground">Message</label>
